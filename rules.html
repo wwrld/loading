@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Rules - Funcps Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #101010;
+            font-family: 'Lexend', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Анимация появления */
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Заголовок страницы */
+        .header {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(90deg, #6e16fd 0%, #fc6123 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        /* Контейнер с правилами (Стеклянная панель) */
+        .rules-container {
+            width: 80%;
+            max-width: 800px;
+            height: 60vh;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            animation: slideUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Стилизация скроллбара (под стиль сервера) */
+        .rules-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .rules-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .rules-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(#6e16fd, #fc6123);
+            border-radius: 10px;
+        }
+
+        .rule-section {
+            margin-bottom: 25px;
+        }
+
+        .rule-section h2 {
+            font-size: 1.4rem;
+            color: #fc6123;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .rule-section h2 span {
+            margin-right: 10px;
+            color: #6e16fd;
+            font-weight: 800;
+        }
+
+        .rule-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0;
+        }
+
+        /* Кнопка "Назад" */
+        .back-btn {
+            margin-top: 30px;
+            padding: 12px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: slideUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #6e16fd;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ПРАВИЛА СЕРВЕРА</h1>
+    </div>
+
+    <div class="rules-container">
+        <div class="rule-section">
+            <h2><span>1.</span> Основное поведение</h2>
+            <p>Уважайте других игроков и администрацию. Оскорбления, расизм и токсичное поведение запрещены.</p>
+        </div>
+
+        <div class="rule-section">
+            <h2><span>2.</span> Иcпользование читов</h2>
+            <p>Запрещено использование любых читов, скриптов и прочих ПО.</p>
+        </div>
+
+        <div class="rule-section">
+            <h2><span>3.</span> Использование багов</h2>
+            <p>Запрещено использование любых недоработок карты или игровых механик в корыстных целях. О багах сообщайте в Telegram.</p>
+        </div>
+
+        <div class="rule-section">
+            <h2><span>4.</span> Микрофон и Чат</h2>
+            <p>Запрещен спам, включение музыки в голосовой чат без разрешения и использование программ для изменения голоса.</p>
+        </div>
+
+        <div class="rule-section">
+            <h2><span>5.</span> Администрация</h2>
+            <p>Решение администратора является окончательным. Если вы не согласны — пишите жалобу на форум или в наш Telegram.</p>
+        </div>
+    </div>
+
+    <a href="menu.html" class="back-btn">ВЕРНУТЬСЯ В МЕНЮ</a>
+
+</body>
+</html>

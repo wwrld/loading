@@ -25,5 +25,21 @@
 </head>
 <body>
   <div class="bg"></div>
+  
+  <audio id="background-music" autoplay loop>
+    <source src="https://github.com/wwrld/sound/raw/refs/heads/main/melody5.mp3" type="audio/mpeg">
+  </audio>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var audio = document.getElementById('background-music');
+      var playPromise = audio.play();
+          document.body.addEventListener('click', function() {
+            audio.play();
+          }, { once: true });
+        });
+      }
+    });
+  </script>
 </body>
 </html>

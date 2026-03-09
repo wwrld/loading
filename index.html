@@ -1,45 +1,481 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-  <title>funcps server</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUNCPS Loading</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      padding: 0;
-      margin: 0;
+    :root {
+      --bg: #08121f;
+      --panel: rgba(8, 20, 34, 0.7);
+      --border: rgba(255, 255, 255, 0.14);
+      --text: #eef5ff;
+      --muted: #9fb2ca;
+      --accent: #4fd1ff;
+      --accent-2: #9c65ff;
+      --ok: #3dffa8;
     }
-    .bg {
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       width: 100%;
-      min-height: 100vh;
-      background: #556983;
+      min-height: 100%;
+      margin: 0;
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      background-image:
+        radial-gradient(ellipse at 20% 15%, rgba(79, 209, 255, 0.35), transparent 55%),
+        radial-gradient(ellipse at 80% 85%, rgba(156, 101, 255, 0.3), transparent 45%),
+        linear-gradient(140deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url("https://raw.githubusercontent.com/wwrld/loading/refs/heads/main/funcps.png") center / cover no-repeat;
+      filter: blur(1px) saturate(1.1);
+      transform: scale(1.03);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(135deg, rgba(6, 13, 25, 0.8), rgba(7, 14, 22, 0.55) 40%, rgba(8, 15, 27, 0.88));
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: min(980px, 92vw);
+      padding: 26px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      box-shadow:
+        0 20px 60px rgba(3, 7, 14, 0.62),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      animation: fade-up .5s ease-out both;
+    }
+
+    .header {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-sub {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .chip {
+      display: inline-flex;
       align-items: center;
-      background-image: url("https://raw.githubusercontent.com/wwrld/loading/refs/heads/main/funcps.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      gap: 8px;
+      margin-top: 4px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(79, 209, 255, 0.5);
+      background: rgba(79, 209, 255, 0.1);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.5fr .95fr;
+      gap: 18px;
+    }
+
+    .card {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 14, 24, 0.6);
+      padding: 16px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .status-text {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      min-height: 24px;
+    }
+
+    .file-text {
+      color: #d5e4f8;
+      font-size: 13px;
+      min-height: 18px;
+      margin-bottom: 12px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .progress-row strong {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .progress-row span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .bar-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background:
+        linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 28px rgba(79, 209, 255, 0.55);
+      transition: width .25s ease;
+    }
+
+    .stats {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 14px;
+    }
+
+    .stat strong {
+      font-size: 15px;
+    }
+
+    .map-card {
+      margin-top: 10px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .map-preview {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      display: block;
+      object-fit: cover;
+    }
+
+    .map-caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(5, 11, 21, 0.7);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .ready {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        flex-direction: column;
+      }
+
+      .chip {
+        margin-top: 0;
+      }
     }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-  
+  <div class="overlay"></div>
+
+  <main class="wrap">
+    <header class="header">
+      <div>
+        <h1 id="server-name" class="brand-title">FUNCPS COMMUNITY</h1>
+        <div id="gamemode-text" class="brand-sub">Подключение к серверу...</div>
+      </div>
+      <div class="chip" id="connect-chip">Загрузка ресурсов</div>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <div class="label">Прогресс</div>
+        <div id="status-text" class="status-text">Подготовка...</div>
+        <div id="file-text" class="file-text">Ожидание данных от сервера</div>
+        <div class="progress-row">
+          <strong id="progress-value">0%</strong>
+          <span id="progress-files">0 / 0 файлов</span>
+        </div>
+        <div class="bar">
+          <div id="bar-fill" class="bar-fill"></div>
+        </div>
+      </article>
+
+      <aside class="card">
+        <div class="label">Информация</div>
+        <div class="stats">
+          <div class="stat">
+            <span>Игроки</span>
+            <strong id="players-value">-- / --</strong>
+          </div>
+          <div class="stat">
+            <span>Карта</span>
+            <strong id="map-value">unknown</strong>
+          </div>
+        </div>
+        <div class="map-card">
+          <img
+            id="map-preview"
+            class="map-preview"
+            src="https://raw.githubusercontent.com/wwrld/loading/refs/heads/main/funcps.png"
+            alt="Map preview"
+          >
+          <div class="map-caption">
+            <span id="map-caption-name">Иконка карты</span>
+            <span id="ready-text">Загрузка</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
   <audio id="background-music" autoplay loop>
     <source src="https://github.com/wwrld/sound/raw/refs/heads/main/melody5.mp3" type="audio/mpeg">
   </audio>
-  
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var audio = document.getElementById('background-music');
-      var playPromise = audio.play();
-          document.body.addEventListener('click', function() {
-            audio.play();
-          }, { once: true });
-        });
+    (function () {
+      var state = {
+        totalFiles: 0,
+        downloadedFiles: 0,
+        currentFile: "",
+        mapName: "unknown",
+        maxPlayers: "--",
+        currentPlayers: "--",
+        serverName: "FUNCPS COMMUNITY",
+        gamemode: "",
+        status: "Подготовка..."
+      };
+
+      var els = {
+        serverName: document.getElementById("server-name"),
+        gamemodeText: document.getElementById("gamemode-text"),
+        connectChip: document.getElementById("connect-chip"),
+        statusText: document.getElementById("status-text"),
+        fileText: document.getElementById("file-text"),
+        progressValue: document.getElementById("progress-value"),
+        progressFiles: document.getElementById("progress-files"),
+        barFill: document.getElementById("bar-fill"),
+        playersValue: document.getElementById("players-value"),
+        mapValue: document.getElementById("map-value"),
+        mapPreview: document.getElementById("map-preview"),
+        mapCaptionName: document.getElementById("map-caption-name"),
+        readyText: document.getElementById("ready-text")
+      };
+
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
       }
-    });
+
+      function parsePlayersFromStatus(statusText) {
+        if (!statusText) {
+          return null;
+        }
+        var match = statusText.match(/(\d{1,2})\s*\/\s*(\d{1,2})/);
+        if (!match) {
+          return null;
+        }
+        return { current: match[1], max: match[2] };
+      }
+
+      function mapIconUrl(mapName) {
+        if (!mapName || mapName === "unknown") {
+          return "https://raw.githubusercontent.com/wwrld/loading/refs/heads/main/funcps.png";
+        }
+        return "https://image.gametracker.com/images/maps/160x120/garrysmod/" + encodeURIComponent(mapName) + ".jpg";
+      }
+
+      function updateProgress() {
+        var total = state.totalFiles > 0 ? state.totalFiles : 0;
+        var done = clamp(state.downloadedFiles, 0, total || state.downloadedFiles);
+
+        var percent = 0;
+        if (total > 0) {
+          percent = Math.round((done / total) * 100);
+        } else if (/workshop complete|sending client info|starting lua/i.test(state.status)) {
+          percent = 100;
+        }
+
+        percent = clamp(percent, 0, 100);
+
+        els.progressValue.textContent = percent + "%";
+        els.progressFiles.textContent = done + " / " + total + " файлов";
+        els.barFill.style.width = percent + "%";
+
+        var isReady = percent >= 100;
+        els.readyText.textContent = isReady ? "Почти готово" : "Загрузка";
+        els.readyText.className = isReady ? "ready" : "";
+      }
+
+      function render() {
+        els.serverName.textContent = state.serverName || "FUNCPS COMMUNITY";
+        els.gamemodeText.textContent = state.gamemode ? "Режим: " + state.gamemode : "Подключение к серверу...";
+        els.statusText.textContent = state.status || "Подготовка...";
+        els.fileText.textContent = state.currentFile || "Ожидание данных от сервера";
+        els.playersValue.textContent = state.currentPlayers + " / " + state.maxPlayers;
+        els.mapValue.textContent = state.mapName;
+        els.mapCaptionName.textContent = state.mapName;
+        els.connectChip.textContent = state.status || "Загрузка ресурсов";
+        updateProgress();
+      }
+
+      function setMap(mapName) {
+        state.mapName = mapName || "unknown";
+        els.mapPreview.src = mapIconUrl(state.mapName);
+      }
+
+      window.GameDetails = function (serverName, serverUrl, mapName, maxPlayers, steamId, gamemode) {
+        state.serverName = serverName || state.serverName;
+        state.maxPlayers = maxPlayers || state.maxPlayers;
+        state.gamemode = gamemode || state.gamemode;
+        setMap(mapName);
+        render();
+      };
+
+      window.SetStatusChanged = function (statusText) {
+        state.status = statusText || state.status;
+        var players = parsePlayersFromStatus(statusText);
+        if (players) {
+          state.currentPlayers = players.current;
+          state.maxPlayers = players.max;
+        }
+        render();
+      };
+
+      window.SetFilesNeeded = function (filesNeeded) {
+        var parsed = parseInt(filesNeeded, 10);
+        state.totalFiles = Number.isNaN(parsed) ? 0 : Math.max(parsed, 0);
+        state.downloadedFiles = 0;
+        render();
+      };
+
+      window.SetFilesTotal = function (filesTotal) {
+        var parsed = parseInt(filesTotal, 10);
+        state.totalFiles = Number.isNaN(parsed) ? state.totalFiles : Math.max(parsed, 0);
+        render();
+      };
+
+      window.DownloadingFile = function (fileName) {
+        state.currentFile = fileName || "";
+        state.downloadedFiles += 1;
+        render();
+      };
+
+      window.SetCurrentServerPopulation = function (currentPlayers, maxPlayers) {
+        state.currentPlayers = currentPlayers != null ? String(currentPlayers) : state.currentPlayers;
+        state.maxPlayers = maxPlayers != null ? String(maxPlayers) : state.maxPlayers;
+        render();
+      };
+
+      var audio = document.getElementById("background-music");
+      if (audio) {
+        audio.volume = 0.25;
+        var safePlay = audio.play();
+        if (safePlay && typeof safePlay.catch === "function") {
+          safePlay.catch(function () {
+            document.body.addEventListener("click", function () {
+              audio.play();
+            }, { once: true });
+          });
+        }
+      }
+
+      render();
+    })();
   </script>
 </body>
 </html>
